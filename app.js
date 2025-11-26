@@ -15,6 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Basic route to check if the server is running
+import authRoutes from './src/routes/authRoutes.js';
+
+app.use('/auth', authRoutes);
 
 
 
