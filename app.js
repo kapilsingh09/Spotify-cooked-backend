@@ -1,7 +1,14 @@
 import express from 'express';
 import dotenv from 'dotenv'
-const app = express();
+import cors from 'cors';
 
+
+const app = express();
+// cors.Options = {
+//   origin: 'http://localhost:3000', // Replace with your frontend URL
+//   optionsSuccessStatus: 200
+// };
+// app.use(cors(cors));
 // Load environment variables from .env file
 dotenv.config(
   {
@@ -16,6 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Basic route to check if the server is running
 import authRoutes from './src/routes/authRoutes.js';
+import playlistRoutes from "./src/routes/playlistRoutes.js";
+
+app.use("/api/playlists", playlistRoutes);
 
 app.use('/auth', authRoutes);
 

@@ -13,7 +13,7 @@ export const loginWithSpotify = (req, res) =>{
     const redirectUrl = 'https://accounts.spotify.com/authorize?'+
         querystring.stringify({
             response_type:'code',
-            client_id:spotifyConfig.client_id,
+            client_id:spotifyConfig.clientId,
             scope:scope,
             redirect_uri:spotifyConfig.redirectUri
         });
@@ -23,7 +23,7 @@ export const loginWithSpotify = (req, res) =>{
 };
 
 export const spotifyCallback = async (req, res) => {
-  const code = req.query.code;  // Get code from query parameters
+  const code = req.query.code;  
 
   try {
     // Request Spotify token API to exchange code for access token
@@ -42,16 +42,19 @@ export const spotifyCallback = async (req, res) => {
       },
     });
 
-    // Extract tokens from Spotify response
+
     const { access_token, refresh_token } = tokenResponse.data;
 
-    // Send tokens to frontend or client
+
+
     return res.json({
       success: true,
       access_token,
       refresh_token,
     });
+    
   } catch (err) {
+
     console.error(err.response?.data || err);
     return res.status(500).json({ error: "Spotify auth failed" });
   }
