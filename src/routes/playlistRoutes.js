@@ -3,6 +3,6 @@ import { getUserPlaylists } from "../controllers/playlistController.js";
 
 const router = express.Router();
 
-router.get("/user", getUserPlaylists);
+router.get("/", getUserPlaylists);
 
 export default router;

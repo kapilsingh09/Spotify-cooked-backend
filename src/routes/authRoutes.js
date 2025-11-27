@@ -1,9 +1,9 @@
 import express from "express";
-import { loginWithSpotify, spotifyCallback } from "../controllers/authController.js";
+import { spotifyLogin, spotifyCallback } from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.get("/login", loginWithSpotify);
+router.get("/login", spotifyLogin);
 router.get("/callback", spotifyCallback);
 
 export default router;

@@ -1,61 +1,59 @@
-import querystring from 'querystring';
-import axios from 'axios';
-import {spotifyConfig} from '../config/spotifyconfig.js';
+import axios from "axios";
+import querystring from "querystring";
+import dotenv from "dotenv";
 
-export const loginWithSpotify = (req, res) =>{
-    const scope = [
-    "playlist-read-private",
-    "playlist-read-collaborative",
-    "user-read-email",
-    "user-read-private",
-    ].join(" ");
+dotenv.config();
 
-    const redirectUrl = 'https://accounts.spotify.com/authorize?'+
-        querystring.stringify({
-            response_type:'code',
-            client_id:spotifyConfig.clientId,
-            scope:scope,
-            redirect_uri:spotifyConfig.redirectUri
-        });
+// ---------------------------------------------
+// STEP 1: Redirect user to Spotify Login Page
+// ---------------------------------------------
+export const spotifyLogin = (req, res) => {
+  const scope =
+    "user-read-email user-read-private user-top-read playlist-read-private playlist-read-collaborative";
 
-    res.redirect(redirectUrl);
+  const redirectUrl =
+    "https://accounts.spotify.com/authorize?" +
+    querystring.stringify({
+      response_type: "code",
+      client_id: process.env.SPOTIFY_CLIENT_ID,
+      scope: scope,
+      redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+    });
 
+  return res.redirect(redirectUrl);
 };
 
+// ---------------------------------------------
+// STEP 2: Spotify Callback → Exchange Code for Tokens
+// ---------------------------------------------
 export const spotifyCallback = async (req, res) => {
-  const code = req.query.code;  
+  const code = req.query.code; // Spotify returns auth code
 
   try {
-    // Request Spotify token API to exchange code for access token
-    const tokenResponse = await axios({
-      method: "POST",
-      url: "https://accounts.spotify.com/api/token",
-      data: querystring.stringify({
-        grant_type: "authorization_code", // type of OAuth flow
-        code: code,                       // code from query params
-        redirect_uri: spotifyConfig.redirectUri, // must match earlier redirect URI
-        client_id: spotifyConfig.clientId,       // your client id
-        client_secret: spotifyConfig.clientSecret, // your client secret
+    // EXCHANGE CODE FOR TOKENS
+    const response = await axios.post(
+      "https://accounts.spotify.com/api/token",
+      querystring.stringify({
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        client_secret: process.env.SPOTIFY_CLIENT_SECRET,
       }),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
 
+    const { access_token, refresh_token } = response.data;
 
-    const { access_token, refresh_token } = tokenResponse.data;
+    // ⭐ Redirect back to frontend with tokens ⭐
+    return res.redirect(
+      `http://localhost:5173/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
+    );
 
-
-
-    return res.json({
-      success: true,
-      access_token,
-      refresh_token,
-    });
-    
   } catch (err) {
-
-    console.error(err.response?.data || err);
-    return res.status(500).json({ error: "Spotify auth failed" });
+    console.log("Spotify Auth Error:", err.response?.data || err);
+    return res.status(500).send("Spotify Authentication Failed");
   }
 };
