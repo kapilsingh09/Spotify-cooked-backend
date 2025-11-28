@@ -47,16 +47,14 @@ export const spotifyCallback = async (req, res) => {
 
     const { access_token, refresh_token } = response.data;
 
-    // Determine Frontend URL and use a safe fallback if it's not provided
-    // const rawFrontendUrl = process.env.FRONTEND_URL || process.env.ALLOWED_ORIGINS || "https://spotify-cooked-frontend.vercel.app";
-    // ensure no trailing slash
-    // const frontendUrl = rawFrontendUrl.replace(/\/$/, "");
+    // Hardcoded production frontend URL
+    const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
     // ⭐ Redirect back to frontend with tokens ⭐
-    // console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
+    console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
 
     return res.redirect(
-      `https://spotify-cooked-frontend.vercel.app/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
+      `${frontendUrl}/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
     );
 
   } catch (err) {
