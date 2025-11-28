@@ -5,13 +5,11 @@ import cors from 'cors';
 const app = express();
 
 // Load environment variables from .env file
-dotenv.config({
-  path: './src/.env'
-});
+dotenv.config();
 
 // Enable CORS for frontend
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS, // Allow frontend
+  origin: process.env.ALLOWED_ORIGINS || 'http://localhost:5173', // Allow frontend
   credentials: true
 }));
 
