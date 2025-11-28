@@ -51,7 +51,7 @@ export const spotifyCallback = async (req, res) => {
     const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
     // ⭐ Redirect back to frontend with tokens ⭐
-    console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
+    // console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
 
     return res.redirect(
       `${frontendUrl}/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
