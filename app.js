@@ -4,31 +4,36 @@ import cors from 'cors';
 
 const app = express();
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
-// Enable CORS for frontend
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
-  : ['http://localhost:5173', 'https://spotify-cooked-frontend.vercel.app'];
+// BEST PRACTICE: SAFE ALLOWED ORIGINS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://spotify-cooked-frontend.vercel.app"
+];
 
+// FIXED CORS MIDDLEWARE
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+  origin: (origin, callback) => {
+    // Allow requests with no origin (Postman, curl, mobile apps)
     if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+
+    if (allowedOrigins.includes(origin)) {
+      // allowed
+      return callback(null, true);
     }
+
+    // not allowed
+    return callback(new Error("CORS: Not allowed"));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Middleware to parse JSON requests
+// JSON body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,7 +43,7 @@ import playlistRoutes from "./src/routes/playlistRoutes.js";
 import aiRoutes from "./src/routes/aiRoutes.js";
 import { initializeGemini } from "./src/services/geminiService.js";
 
-// Initialize Gemini AI
+// Initialize Gemini
 initializeGemini();
 
 // Register routes
@@ -46,13 +51,13 @@ app.use('/auth', authRoutes);
 app.use("/api/playlists", playlistRoutes);
 app.use("/api/ai", aiRoutes);
 
-// Basic route to check if the server is running
+// Base route
 app.get('/', (req, res) => {
   res.send('Cooked API is running! 🔥');
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
