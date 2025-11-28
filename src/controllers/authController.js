@@ -49,7 +49,7 @@ export const spotifyCallback = async (req, res) => {
 
     // ⭐ Redirect back to frontend with tokens ⭐
     return res.redirect(
-      `http://localhost:5173/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
+      `${process.env.FRONTEND_URL}/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
     );
 
   } catch (err) {
