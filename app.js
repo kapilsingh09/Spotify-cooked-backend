@@ -53,7 +53,7 @@ app.use("/api/ai", aiRoutes);
 
 // Base route
 app.get('/', (req, res) => {
-  res.send('Cooked API is running! 🔥');
+  res.send('Cooked ! APP is running! ');
 });
 
 // Start server
