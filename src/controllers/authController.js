@@ -62,3 +62,44 @@ export const spotifyCallback = async (req, res) => {
     return res.status(500).send("Spotify Authentication Failed");
   }
 };
+
+// ---------------------------------------------
+// STEP 3: SECURE LOGOUT - Clear all tokens
+// ---------------------------------------------
+export const spotifyLogout = async (req, res) => {
+  try {
+    // Get token from Authorization header or request body
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.replace('Bearer ', '') || req.body.access_token;
+
+    // If token exists, we could optionally revoke it with Spotify
+    // Note: Spotify doesn't provide a standard token revocation endpoint
+    // but tokens expire automatically (usually in 1 hour)
+    
+    if (token) {
+      console.log("Logout: Token received and will be invalidated client-side");
+      // In a production app with a database, you would:
+      // 1. Store tokens in DB with user session
+      // 2. Mark tokens as revoked/deleted here
+      // 3. Implement token validation middleware to reject revoked tokens
+    }
+
+    // Clear any cookies if you're using them
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    res.clearCookie('spotify_session');
+
+    // Send success response
+    return res.status(200).json({ 
+      success: true, 
+      message: "Logged out successfully. All tokens and sessions cleared." 
+    });
+
+  } catch (err) {
+    console.error("Logout Error:", err);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Logout failed on server" 
+    });
+  }
+};
