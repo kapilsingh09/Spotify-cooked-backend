@@ -50,7 +50,6 @@ export const spotifyCallback = async (req, res) => {
     // Hardcoded production frontend URL
     const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
-    // ⭐ Redirect back to frontend with tokens ⭐
     // console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
 
     return res.redirect(
@@ -72,33 +71,24 @@ export const spotifyLogout = async (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader?.replace('Bearer ', '') || req.body.access_token;
 
-    if (token) {
-      console.log("Logout: Token received and will be invalidated client-side");
-      // In a production app with a database, you would:
-      // 1. Store tokens in DB with user session
-      // 2. Mark tokens as revoked/deleted here
-      // 3. Implement token validation middleware to reject revoked tokens
-    }
+    // if (token) {
+    //   console.log("Logout: Token received and will be invalidated client-side");
+    // }
 
     // Clear any cookies if you're using them
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
     res.clearCookie('spotify_session');
 
-    // Hardcoded production frontend URL
     const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
-    // ⭐ CRITICAL: Redirect to Spotify logout to destroy Spotify session ⭐
-    // This forces Spotify to show the login screen again on next login attempt
-    // The 'continue' parameter redirects back to our login page after Spotify logout
     const spotifyLogoutUrl = `https://accounts.spotify.com/logout?continue=${encodeURIComponent(`${frontendUrl}/login`)}`;
     
-    console.log("Redirecting to Spotify logout:", spotifyLogoutUrl);
+    // console.log("Redirecting to Spotify logout:", spotifyLogoutUrl);///
     return res.redirect(spotifyLogoutUrl);
 
   } catch (err) {
     console.error("Logout Error:", err);
-    // Even on error, try to redirect to Spotify logout
     const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
     return res.redirect(`https://accounts.spotify.com/logout?continue=${encodeURIComponent(`${frontendUrl}/login`)}`);
   }

@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/login", spotifyLogin);
 router.get("/callback", spotifyCallback);
-router.get("/logout", spotifyLogout); // 🔒 SECURE LOGOUT ROUTE (changed to GET for redirect)
+router.get("/logout", spotifyLogout); // SECURE LOGOUT ROUTE (changed to GET for redirect)
 
 export default router;

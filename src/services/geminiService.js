@@ -3,10 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 let genAI;
 let model;
 
-/**
- * Initialize Gemini AI generative model
- * @returns {import("@google/generative-ai").GenerativeModel | null}
- */
+
 export const initializeGemini = () => {
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -37,13 +34,8 @@ const getRandomEmojis = (count = 5) => {
   return shuffled.slice(0, count).join(" ");
 };
 
-/**
- * Build the roast prompt with bullet point output format
- * @param {string} playlistSummary
- * @returns {string} prompt string
- */
+
 const buildRoastPrompt = (playlistSummary) => {
-    // Injecting new instructions for higher-quality, non-repetitive humor
     return `
 You are a hilarious, savage music critic who roasts Spotify playlists with BRUTAL honesty and comedy. Think of yourself as a stand-up comedian meeting a music snob.
 
@@ -76,12 +68,6 @@ Make them laugh SO HARD they'll actually share this roast with their friends! Be
 `.trim();
 };
 
-
-/**
- * Generate a savage but funny roast for Spotify playlists using Gemini AI
- * @param {Array<{name: string, tracks?: { total: number }, public?: boolean}>} playlists
- * @returns {Promise<string>} Roast text
- */
 export const roastPlaylists = async (playlists) => {
   try {
     if (!model) {
@@ -104,10 +90,8 @@ export const roastPlaylists = async (playlists) => {
 
     const prompt = buildRoastPrompt(playlistSummary);
 
-    // Generate roast content
     const result = await model.generateContent(prompt);
 
-    // Await and extract text response properly to avoid undefined
     const response = await result.response;
     const roastText = await response.text();
 
