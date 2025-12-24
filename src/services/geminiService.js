@@ -92,5 +92,6 @@ export const roastPlaylists = async (playlists) => {
   } catch (error) {
     console.error("Error generating roast:", error);
     throw new Error("Failed to generate roast");
+    // return "Failed to generate roast";
   }
 };

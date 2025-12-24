@@ -57,7 +57,7 @@ export const spotifyCallback = async (req, res) => {
     );
 
   } catch (err) {
-    console.log("Spotify Auth Error:", err.response?.data || err);
+    console.error("Spotify Auth Error:", err.response?.data || err);
     return res.status(500).send("Spotify Authentication Failed");
   }
 };
