@@ -5,7 +5,10 @@ import cors from 'cors';
 const app = express();
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: './.env' });
+
+// console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY);
+
 
 // BEST PRACTICE: SAFE ALLOWED ORIGINS
 const allowedOrigins = [

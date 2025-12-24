@@ -5,7 +5,8 @@ let model;
 
 export const initializeGemini = () => {
   const apiKey = process.env.GEMINI_API_KEY;
-
+  // console.log(apiKey);
+  
   if (!apiKey) {
     console.warn("⚠️ Warning: GEMINI_API_KEY is not set. AI roasting will not work.");
     return null;
