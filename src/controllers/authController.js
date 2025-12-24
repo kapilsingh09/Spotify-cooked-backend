@@ -48,12 +48,12 @@ export const spotifyCallback = async (req, res) => {
     const { access_token, refresh_token } = response.data;
 
     // Hardcoded production frontend URL
-    const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
+    // const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
     // console.log("Redirecting to frontend at:", `${frontendUrl}/dashboard`);
 
     return res.redirect(
-      `${frontendUrl}/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
+      `${process.env.FRONTEND_URL}/dashboard?access_token=${access_token}&refresh_token=${refresh_token}`
     );
 
   } catch (err) {
@@ -80,9 +80,9 @@ export const spotifyLogout = async (req, res) => {
     res.clearCookie('refresh_token');
     res.clearCookie('spotify_session');
 
-    const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
+    // const frontendUrl = "https://spotify-cooked-frontend.vercel.app";
 
-    const spotifyLogoutUrl = `https://accounts.spotify.com/logout?continue=${encodeURIComponent(`${frontendUrl}/login`)}`;
+    const spotifyLogoutUrl = `https://accounts.spotify.com/logout?continue=${encodeURIComponent(`${process.env.FRONTEND_URL}/login`)}`;
     
     // console.log("Redirecting to Spotify logout:", spotifyLogoutUrl);///
     return res.redirect(spotifyLogoutUrl);

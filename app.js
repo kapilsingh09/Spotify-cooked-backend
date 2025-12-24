@@ -11,7 +11,7 @@ dotenv.config();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://spotify-cooked-frontend.vercel.app"
+  process.env.FRONTEND_URL
 ];
 
 // FIXED CORS MIDDLEWARE
@@ -32,6 +32,7 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 // JSON body parsing
 app.use(express.json());
@@ -54,6 +55,7 @@ app.use("/api/ai", aiRoutes);
 // Base route
 app.get('/', (req, res) => {
   res.send('Cooked ! APP is running! ');
+  // console.log(process.env.FRONTEND_URL);
 });
 
 // Start server

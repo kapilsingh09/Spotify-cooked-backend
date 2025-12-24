@@ -3,7 +3,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 let genAI;
 let model;
 
-
 export const initializeGemini = () => {
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -17,18 +16,11 @@ export const initializeGemini = () => {
   return model;
 };
 
-/** 
- * Array of emojis for extra flair
- */
+
 const extraEmojis = [
   "💀", "😂", "🔥", "😭", "🎵", "🎪", "🤡", "🎧", "🎤", "😹", "🥳", "🤣",
 ];
 
-/**
- * Utility to get random emojis from the array
- * @param {number} count Number of emojis to pick
- * @returns {string} Emojis string
- */
 const getRandomEmojis = (count = 5) => {
   const shuffled = extraEmojis.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count).join(" ");
@@ -56,7 +48,7 @@ ${playlistSummary || "No playlists found, but you gotta roast something!"}
 
 Write an ABSOLUTELY HILARIOUS roast in 4-5 bullet points. Keep it SHORT and SNAPPY — no more than 100 words total. Use plenty of unique emojis.
 
-💥 **IMPORTANT: Format the roast STRICTLY as bullet points. Each bullet point must start with a "•" (bullet character) followed by a space, and be on its own line.**
+ **IMPORTANT: Format the roast STRICTLY as bullet points. Each bullet point must start with a "•" (bullet character) followed by a space, and be on its own line.**
 
 Make jokes about:
 -   **Originality:** How generic their names are (e.g., "Chill Mix").
@@ -97,7 +89,7 @@ export const roastPlaylists = async (playlists) => {
 
     return roastText.trim();
   } catch (error) {
-    console.error("❌ Error generating roast:", error);
+    console.error("Error generating roast:", error);
     throw new Error("Failed to generate roast");
   }
 };
